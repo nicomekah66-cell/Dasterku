@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dasterku</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f7f7f7;
+    margin:0;
+    padding:10px;
+}
+h1{text-align:center;}
+.katalog{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+.card{
+    background:#fff;
+    border-radius:10px;
+    padding:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+.card img{width:100%;border-radius:8px;}
+.price{color:#e91e63;font-weight:bold;}
+select,input,textarea{
+    width:100%;
+    margin-top:6px;
+    padding:7px;
+}
+.total{margin-top:8px;font-weight:bold;}
+button{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    background:#25D366;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+}
+.chat-admin{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25D366;
+    color:#fff;
+    padding:12px 18px;
+    border-radius:50px;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Dasterku</h1>
+
+<div class="katalog">
+
+<div class="card" data-harga="75000">
+<img src="https://via.placeholder.com/300x200">
+<h3>Daster Mawar</h3>
+<div class="price">Rp 75.000</div>
+
+<select class="ukuran">
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<input type="number" class="jumlah" value="1" min="1">
+
+<select class="ongkir">
+<option value="10000">JNE – 10.000</option>
+<option value="15000">J&T – 15.000</option>
+</select>
+
+<textarea class="catatan" placeholder="Catatan (opsional)"></textarea>
+
+<div class="total"></div>
+<button onclick="pesan(this,'Daster Mawar')">Pesan via WhatsApp</button>
+</div>
+
+</div>
+
+<a class="chat-admin"
+href="https://wa.me/6281234567890"
+target="_blank">💬 Chat Admin</a>
+
+<script>
+const nomorWA = "6281234567890";
+
+document.querySelectorAll(".card").forEach(card=>{
+    card.querySelectorAll("select,input").forEach(el=>{
+        el.addEventListener("change",()=>update(card));
+    });
+    update(card);
+});
+
+function update(card){
+    const harga=parseInt(card.dataset.harga);
+    const j=card.querySelector(".jumlah").value;
+    const o=parseInt(card.querySelector(".ongkir").value);
+    card.querySelector(".total").innerText=
+    "Total: Rp "+(harga*j+o).toLocaleString("id-ID");
+}
+
+function pesan(btn,nama){
+    const card=btn.parentElement;
+    const ukuran=card.querySelector(".ukuran").value;
+    const jumlah=card.querySelector(".jumlah").value;
+    const catatan=card.querySelector(".catatan").value;
+    const total=card.querySelector(".total").innerText;
+
+    const text=`Halo Admin,
+Produk: ${nama}
+Ukuran: ${ukuran}
+Jumlah: ${jumlah}
+${catatan ? "Catatan: "+catatan : ""}
+${total}`;
+
+    window.open(`https://wa.me/${nomorWA}?text=${encodeURIComponent(text)}`);
+}
+</script>
+
+</body>
+</html>
